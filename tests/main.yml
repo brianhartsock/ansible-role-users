@@ -43,9 +43,10 @@
       - username: foobar_file
         home_files:
           - "tests/.bashrc"
-    users_group: staff
+    users_group:
+      name: staff
     users_groups:
-      - www-data
+      - name: www-data
     users_authorized_keys_exclusive: yes
     users_remove:
     - foobar

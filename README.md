@@ -164,9 +164,12 @@ This is an example playbook:
       - username: foobar_file
         home_files:
           - "tests/.bashrc"
-    users_group: staff
+    users_group:
+      name: staff
+      gid: 50
     users_groups:
-      - www-data
+      - name: www-data
+        gid: 33
     users_authorized_keys_exclusive: yes
     users_remove:
     - foobar

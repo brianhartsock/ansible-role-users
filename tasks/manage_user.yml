@@ -10,9 +10,9 @@
     generate_ssh_key: "{{ user.ssh_key_generate | default(omit) }}"
     group: "{{
             omit if user.group is defined and user.group == user.username
-            else (user.group if user.group is defined else (users_group if users_group else omit))
+            else (user.group if user.group is defined else (users_group.name if users_group else omit))
             }}"
-    groups: "{{ user.groups|join(',') if user.groups is defined else users_groups|join(',') }}"
+    groups: "{{ user.groups if user.groups is defined else users_groups | map(attribute='name') | list }}"
     append: "{{ user.append | default(omit) }}"
     password: "{{ user.password | default(omit) }}"
     ssh_key_file: ".ssh/id_{{ user.ssh_key_type | default(users_ssh_key_type) }}"
