@@ -1,0 +1,26 @@
+name: Publish Role to Galaxy
+
+on: # yamllint disable-line rule:truthy
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up uv.
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install Ansible.
+        run: uv tool install ansible-core
+
+      - name: Trigger a new import on Galaxy.
+        run: >-
+          ansible-galaxy role import --api-key "$GALAXY_API_KEY"
+          "$(echo "$GITHUB_REPO" | cut -d/ -f1)" "$(echo "$GITHUB_REPO" | cut -d/ -f2)"
+        env:
+          GALAXY_API_KEY: ${{ secrets.GALAXY_API_KEY }}
+          GITHUB_REPO: ${{ github.repository }}

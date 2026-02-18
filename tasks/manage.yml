@@ -4,7 +4,7 @@
   ansible.builtin.group:
     name: "{{ users_group }}"
     state: present
-  when: users_group is defined and users_group
+  when: users_group is defined and users_group | length > 0
 
 - name: Adding secondary groups
   ansible.builtin.group:
@@ -13,7 +13,7 @@
   with_items: "{{ users_groups | default([]) }}"
 
 - name: Configure users
-  include_tasks: manage_user.yml
+  ansible.builtin.include_tasks: manage_user.yml
   with_items: "{{ users }}"
   loop_control:
     loop_var: user
