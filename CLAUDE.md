@@ -13,25 +13,21 @@ This is `weareinteractive.users`, an Ansible role that manages Linux users, grou
 uv sync
 ```
 
-### Lint
+### Lint (all hooks)
 ```
-make lint
+uv run pre-commit run --all-files
 ```
-Runs `uv run ansible-lint .` (excludes `./meta/readme.yml` and `.venv` per `.ansible-lint` config).
+Runs yamllint, ansible-lint, and flake8 via pre-commit. Individual linters:
+```
+uv run yamllint .
+uv run ansible-lint
+uv run flake8
+```
 
-### Test (Docker-based)
-```
-make ubuntu22.04   # or ubuntu20.04, ubuntu18.04, ubuntu16.04
-make debian11      # or debian10, debian9, debian8
-```
-Tests run inside Docker containers via `ansiblecheck/ansiblecheck` images. Each target runs syntax check, playbook execution, and idempotence verification against `tests/main.yml`.
-
-### Generate Docs
-```
-gem install ansible-role
-make docs
-```
-Regenerates `README.md` from `meta/readme.yml` via `ansible-role docgen`.
+### Lint Config Notes
+- `.ansible-lint` skips `yaml` rules (handled by yamllint) and excludes `./meta/readme.yml` and `.venv`
+- `.yamllint` uses ansible-lint recommended settings with 160-char line limit and forbids implicit/explicit octal values
+- `.flake8` excludes `.venv`
 
 ## Architecture
 

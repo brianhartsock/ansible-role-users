@@ -6,4 +6,6 @@ requires-python = ">=3.14"
 [dependency-groups]
 dev = [
   "ansible-lint",
+  "flake8",
+  "pre-commit",
 ]
