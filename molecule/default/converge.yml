@@ -1,0 +1,17 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    users:
+      - username: testuser
+        group: testgroup
+        groups:
+          - sudo
+        home_mode: "0750"
+        authorized_keys:
+          - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAITestKeyForMolecule testuser@molecule"
+        ssh_key_generate: true
+        ssh_key_type: ed25519
+    users_group: testgroup
+  roles:
+    - role: brianhartsock.ansible-role-users

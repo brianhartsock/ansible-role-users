@@ -1,0 +1,58 @@
+---
+name: CI
+on: # yamllint disable-line rule:truthy
+  pull_request:
+  push:
+    branches:
+      - master
+
+defaults:
+  run:
+    working-directory: 'brianhartsock.ansible-role-users'
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v4
+        with:
+          path: 'brianhartsock.ansible-role-users'
+
+      - name: Set up uv.
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install dependencies.
+        run: uv sync
+
+      - name: Ansible lint
+        run: uv run ansible-lint
+
+      - name: YAML lint
+        run: uv run yamllint .
+
+      - name: Python lint
+        run: uv run flake8
+
+  molecule:
+    name: Molecule
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v4
+        with:
+          path: 'brianhartsock.ansible-role-users'
+
+      - name: Set up uv.
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install dependencies.
+        run: uv sync
+
+      - name: Run Molecule tests.
+        run: uv run molecule test
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
