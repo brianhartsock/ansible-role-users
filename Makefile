@@ -11,7 +11,7 @@ docs:
 	ansible-role docgen
 
 lint:
-	ansible-lint .
+	uv run ansible-lint .
 
 ubuntu%: TEST_DEPS=apt-get update && \
 	apt-get install -y python openssh-client
