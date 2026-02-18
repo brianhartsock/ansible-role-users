@@ -13,7 +13,7 @@
   with_items: "{{ users_groups | default([]) }}"
 
 - name: Configure users
-  include_tasks: manage_user.yml
+  ansible.builtin.include_tasks: manage_user.yml
   with_items: "{{ users }}"
   loop_control:
     loop_var: user

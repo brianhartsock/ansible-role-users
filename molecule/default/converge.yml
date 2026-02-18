@@ -14,4 +14,4 @@
         ssh_key_type: ed25519
     users_group: testgroup
   roles:
-    - role: brianhartsock.ansible-role-users
+    - role: brianhartsock.users

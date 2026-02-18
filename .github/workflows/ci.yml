@@ -8,7 +8,7 @@ on: # yamllint disable-line rule:truthy
 
 defaults:
   run:
-    working-directory: 'brianhartsock.ansible-role-users'
+    working-directory: 'brianhartsock.users'
 
 jobs:
   lint:
@@ -18,7 +18,7 @@ jobs:
       - name: Check out the codebase.
         uses: actions/checkout@v4
         with:
-          path: 'brianhartsock.ansible-role-users'
+          path: 'brianhartsock.users'
 
       - name: Set up uv.
         uses: astral-sh/setup-uv@v5
@@ -43,7 +43,7 @@ jobs:
       - name: Check out the codebase.
         uses: actions/checkout@v4
         with:
-          path: 'brianhartsock.ansible-role-users'
+          path: 'brianhartsock.users'
 
       - name: Set up uv.
         uses: astral-sh/setup-uv@v5

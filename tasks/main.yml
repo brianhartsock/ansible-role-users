@@ -1,6 +1,7 @@
 ---
 
-- import_tasks: manage.yml
+- name: Manage users
+  ansible.builtin.import_tasks: manage.yml
   tags:
     - system
     - users

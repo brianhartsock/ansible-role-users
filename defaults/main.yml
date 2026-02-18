@@ -41,13 +41,13 @@
 # list of users to add
 users: []
 # create the users
-users_user_create: yes
+users_user_create: true
 # default user's dotfiles
 users_home_files: []
 # users home directory
 users_home: /home
 # create user's home directory
-users_home_create: yes
+users_home_create: true
 # default user's primary group for users
 users_group:
 # default user's secondary groups
@@ -55,12 +55,12 @@ users_groups: []
 # default user's home directory permissions
 users_home_mode: "0755"
 # default user login shell
-#users_shell:
+# users_shell:
 # default user's ssh key type
 users_ssh_key_type: rsa
 # default user's ssh key bits
 users_ssh_key_bits: 2048
 # default user's setting for authorized keys exclusive
-users_authorized_keys_exclusive: no
+users_authorized_keys_exclusive: false
 # list of users to be removed
 users_remove: []
