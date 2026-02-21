@@ -1,9 +1,10 @@
 ---
 
-- hosts: all
-  become: yes
+- name: Test users role
+  hosts: all
+  become: true
   roles:
-    - weareinteractive.users
+    - brianhartsock.users
   vars:
     users:
       - username: root
@@ -11,19 +12,19 @@
         group: root
         authorized_keys:
           - "{{ lookup('file', 'tests/id_rsa.pub') }}"
-        user_create: no
+        user_create: false
       - username: foobar
         name: Foo Bar 1
       - username: foobar_authorized_keys
         authorized_keys:
           - "{{ lookup('file', 'tests/id_rsa.pub') }}"
-        home_create: yes
+        home_create: true
       - username: foobar_nohome
-        home_create: no
+        home_create: false
       - username: foobar_groups
         groups:
           - users
-        append: yes
+        append: true
       - username: foobar_groups_reset
         groups: []
         group: foobar_groups_reset
@@ -36,10 +37,10 @@
           id_rsa_1: "{{ lookup('file', 'tests/id_rsa') }}"
           id_rsa_2: "{{ lookup('file', 'tests/id_rsa') }}"
       - username: foobar_key_generate
-        ssh_key_generate: yes
+        ssh_key_generate: true
         ssh_key_password: secret
       - username: foobar_system
-        system: yes
+        system: true
       - username: foobar_file
         home_files:
           - "tests/.bashrc"
@@ -47,9 +48,8 @@
       name: staff
     users_groups:
       - name: www-data
-    users_authorized_keys_exclusive: yes
+    users_authorized_keys_exclusive: true
     users_remove:
-    - foobar
-    - { username: foobar_key, remove: no }
-    - { username: foobar_authorized_keys, remove: yes }
-
+      - foobar
+      - { username: foobar_key, remove: false }
+      - { username: foobar_authorized_keys, remove: true }

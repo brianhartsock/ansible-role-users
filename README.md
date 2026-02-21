@@ -1,11 +1,10 @@
-# Ansible weareinteractive.users role
+# Ansible brianhartsock.users role
 
-[![Build Status](https://img.shields.io/travis/weareinteractive/ansible-users.svg)](https://travis-ci.org/weareinteractive/ansible-users)
-[![Galaxy](http://img.shields.io/badge/galaxy-weareinteractive.users-blue.svg)](https://galaxy.ansible.com/weareinteractive/users)
-[![GitHub tag](https://img.shields.io/github/tag/weareinteractive/ansible-users.svg)](https://github.com/weareinteractive/ansible-users/releases)
-[![GitHub stars](https://img.shields.io/github/stars/weareinteractive/ansible-users.svg?style=social&label=Star)](https://github.com/weareinteractive/ansible-users)
+[![CI](https://github.com/brianhartsock/ansible-role-users/actions/workflows/ci.yml/badge.svg)](https://github.com/brianhartsock/ansible-role-users/actions/workflows/ci.yml)
+[![Galaxy](http://img.shields.io/badge/galaxy-brianhartsock.users-blue.svg)](https://galaxy.ansible.com/brianhartsock/users)
+[![GitHub tag](https://img.shields.io/github/tag/brianhartsock/ansible-role-users.svg)](https://github.com/brianhartsock/ansible-role-users/releases)
 
-> `weareinteractive.users` is an [Ansible](http://www.ansible.com) role which:
+> `brianhartsock.users` is an [Ansible](http://www.ansible.com) role which:
 >
 > * manages users and groups membership
 > * manages user's private key
@@ -13,26 +12,26 @@
 
 **Note:**
 
-> Since Ansible Galaxy switched all role names to the organization name, this role has moved from `franklinkim.users` to `weareinteractive.users`!
+> This is a fork of [`weareinteractive.users`](https://github.com/weareinteractive/ansible-users), now maintained by [brianhartsock](https://github.com/brianhartsock). The Galaxy namespace has changed from `weareinteractive.users` to `brianhartsock.users`.
 
 ## Installation
 
 Using `ansible-galaxy`:
 
 ```shell
-$ ansible-galaxy install weareinteractive.users
+$ ansible-galaxy install brianhartsock.users
 ```
 
 Using `requirements.yml`:
 
 ```yaml
-- src: weareinteractive.users
+- src: brianhartsock.users
 ```
 
 Using `git`:
 
 ```shell
-$ git clone https://github.com/weareinteractive/ansible-users.git weareinteractive.users
+$ git clone https://github.com/brianhartsock/ansible-role-users.git brianhartsock.users
 ```
 
 ## Dependencies
@@ -124,7 +123,7 @@ This is an example playbook:
 - hosts: all
   become: yes
   roles:
-    - weareinteractive.users
+    - brianhartsock.users
   vars:
     users:
       - username: root
@@ -182,11 +181,23 @@ This is an example playbook:
 
 ## Testing
 
+Dependencies are managed with [uv](https://docs.astral.sh/uv/). Linting uses [pre-commit](https://pre-commit.com/) hooks (yamllint, ansible-lint, flake8). Integration tests use [Molecule](https://ansible.readthedocs.io/projects/molecule/) with Docker (Ubuntu 22.04 and 24.04).
+
 ```shell
-$ git clone https://github.com/weareinteractive/ansible-users.git
-$ cd ansible-users
-$ make test
+$ git clone https://github.com/brianhartsock/ansible-role-users.git
+$ cd ansible-role-users
+$ uv sync
+$ uv run pre-commit run --all-files
+$ uv run molecule test
 ```
+
+## CI
+
+CI runs via [GitHub Actions](https://github.com/brianhartsock/ansible-role-users/actions):
+
+* **Lint** -- yamllint, ansible-lint, and flake8 on every push and pull request
+* **Molecule** -- full Molecule test suite on every push and pull request
+* **Release** -- publishes the role to Ansible Galaxy when a GitHub release is created
 
 ## Contributing
 In lieu of a formal style guide, take care to maintain the existing coding style. Add unit tests and examples for any new or changed functionality.
@@ -196,13 +207,6 @@ In lieu of a formal style guide, take care to maintain the existing coding style
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
-
-*Note: To update the `README.md` file please install and run `ansible-role`:*
-
-```shell
-$ gem install ansible-role
-$ ansible-role docgen
-```
 
 ## License
 Copyright (c) We Are Interactive under the MIT license.
