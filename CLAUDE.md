@@ -88,3 +88,7 @@ Review the changes for Ansible best practices, idempotency, security, cross-plat
 ### 5. Iterate
 
 If verification or code review flags issues, fix them and repeat from step 2. Continue until all checks pass and the review is clean.
+
+## GitHub CLI (`gh`)
+
+This repo is a fork. The `gh` CLI defaults to the upstream parent repo for operations like `gh pr create`. Always pass `--repo brianhartsock/ansible-role-users` to target the correct repository.
