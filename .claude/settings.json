@@ -42,7 +42,17 @@
       "Bash(uv run python *)",
       "Bash(uv run ansible-galaxy *)",
       "Bash(uv add *)",
-      "Bash(uv remove *)"
+      "Bash(uv remove *)",
+      "Bash(gh pr create *)",
+      "Bash(gh pr close *)",
+      "Bash(gh pr merge *)",
+      "Bash(gh pr edit *)",
+      "Bash(gh pr comment *)",
+      "Bash(gh issue create *)",
+      "Bash(gh issue close *)",
+      "Bash(gh issue edit *)",
+      "Bash(gh issue comment *)",
+      "Bash(gh release create *)"
     ],
     "deny": []
   }
