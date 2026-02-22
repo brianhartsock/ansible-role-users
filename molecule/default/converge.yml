@@ -21,3 +21,11 @@
         gid: 1051
   roles:
     - role: brianhartsock.users
+
+- name: Converge (no users_group set)
+  hosts: all
+  vars:
+    users:
+      - username: defaultuser
+  roles:
+    - role: brianhartsock.users

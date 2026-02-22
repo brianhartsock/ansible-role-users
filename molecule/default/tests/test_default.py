@@ -56,3 +56,10 @@ def test_giduser_inherits_role_defaults(host):
     assert user.exists
     assert user.group == 'testgroup'
     assert 'testgroup2' in user.groups
+
+
+def test_default_group_matches_username(host):
+    """Verify group defaults to username when users_group unset."""
+    user = host.user('defaultuser')
+    assert user.exists
+    assert user.group == 'defaultuser'
