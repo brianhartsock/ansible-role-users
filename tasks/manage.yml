@@ -5,7 +5,7 @@
     name: "{{ users_group.name }}"
     gid: "{{ users_group.gid | default(omit) }}"
     state: present
-  when: users_group is defined and users_group | length > 0
+  when: users_group is defined and users_group.name is defined and users_group.name | length > 0
 
 - name: Adding secondary groups
   ansible.builtin.group:

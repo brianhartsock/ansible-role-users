@@ -34,3 +34,25 @@ def test_ssh_key_generated(host):
     key = host.file('/home/testuser/.ssh/id_ed25519')
     assert key.exists
     assert key.mode == 0o600
+
+
+def test_primary_group_gid(host):
+    """Verify the primary group was created with the specified GID."""
+    group = host.group('testgroup')
+    assert group.exists
+    assert group.gid == 1050
+
+
+def test_secondary_group_gid(host):
+    """Verify secondary groups were created with specified GIDs."""
+    group = host.group('testgroup2')
+    assert group.exists
+    assert group.gid == 1051
+
+
+def test_giduser_inherits_role_defaults(host):
+    """Verify a user with no overrides gets role-level groups."""
+    user = host.user('giduser')
+    assert user.exists
+    assert user.group == 'testgroup'
+    assert 'testgroup2' in user.groups
