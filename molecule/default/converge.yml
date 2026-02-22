@@ -12,6 +12,20 @@
           - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAITestKeyForMolecule testuser@molecule"
         ssh_key_generate: true
         ssh_key_type: ed25519
-    users_group: testgroup
+      - username: giduser
+    users_group:
+      name: testgroup
+      gid: 1050
+    users_groups:
+      - name: testgroup2
+        gid: 1051
+  roles:
+    - role: brianhartsock.users
+
+- name: Converge (no users_group set)
+  hosts: all
+  vars:
+    users:
+      - username: defaultuser
   roles:
     - role: brianhartsock.users

@@ -4,7 +4,7 @@
   ansible.builtin.file:
     dest: "{{ user.home | default(users_home ~ '/' ~ user.username) }}"
     owner: "{{ user.username }}"
-    group: "{{ user.group if user.group is defined else (users_group if users_group else user.username) }}"
+    group: "{{ user.group if user.group is defined else (users_group.name if users_group else user.username) }}"
     mode: "{{ user.home_mode if user.home_mode is defined else users_home_mode }}"
   ignore_errors: "{{ ansible_check_mode }}"
 
@@ -12,7 +12,7 @@
   ansible.builtin.file:
     path: "{{ user.home | default(users_home ~ '/' ~ user.username) }}/.ssh"
     owner: "{{ user.username }}"
-    group: "{{ user.group if user.group is defined else (users_group if users_group else user.username) }}"
+    group: "{{ user.group if user.group is defined else (users_group.name if users_group else user.username) }}"
     state: directory
     mode: "0700"
 
@@ -21,7 +21,7 @@
     content: "{{ user.ssh_key }}"
     dest: "{{ user.home | default(users_home ~ '/' ~ user.username) }}/.ssh/id_{{ user.ssh_key_type | default('rsa') }}"
     owner: "{{ user.username }}"
-    group: "{{ user.group if user.group is defined else (users_group if users_group else user.username) }}"
+    group: "{{ user.group if user.group is defined else (users_group.name if users_group else user.username) }}"
     mode: "0600"
   when: user.ssh_key is defined
   no_log: true
@@ -31,7 +31,7 @@
     content: "{{ item.value }}"
     dest: "{{ user.home | default(users_home ~ '/' ~ user.username) }}/.ssh/{{ item.key }}"
     owner: "{{ user.username }}"
-    group: "{{ user.group if user.group is defined else (users_group if users_group else user.username) }}"
+    group: "{{ user.group if user.group is defined else (users_group.name if users_group else user.username) }}"
     mode: "0600"
   when: user.ssh_key is not defined and user.ssh_keys is defined
   with_dict: "{{ user.ssh_keys }}"
@@ -48,7 +48,7 @@
     src: "{{ home_file }}"
     dest: "{{ user.home | default(users_home ~ '/' ~ user.username) }}/{{ home_file | basename }}"
     owner: "{{ user.username }}"
-    group: "{{ user.group if user.group is defined else (users_group if users_group else user.username) }}"
+    group: "{{ user.group if user.group is defined else (users_group.name if users_group else user.username) }}"
     mode: "0644"
   with_items: "{{ user.home_files | default(users_home_files) }}"
   loop_control:
