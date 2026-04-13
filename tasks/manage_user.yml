@@ -1,4 +1,19 @@
 ---
+- name: "Checking if user '{{ user.username }}' exists already"
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ user.username }}"
+  failed_when: false
+  changed_when: false
+
+- name: "Set user existence (before state)"
+  ansible.builtin.set_fact:
+    user_exists_before: "{{ user.username in ansible_facts.getent_passwd }}"
+
+- name: "output getent_passwd before adding user"
+  ansible.builtin.debug:
+    var: ansible_facts.getent_passwd
+  when: users_debug | bool
 
 - name: "Adding user to the system: {{ user.username }}"
   ansible.builtin.user:
@@ -22,6 +37,11 @@
     shell: "{{ user.shell | default(users_shell | default(omit)) }}"
     update_password: "{{ user.update_password | default(omit) }}"
   when: user.user_create | default(users_user_create)
+
+- name: "output getent_passwd after adding user"
+  ansible.builtin.debug:
+    var: ansible_facts.getent_passwd
+  when: users_debug | bool
 
 - name: Configuring user's home
   ansible.builtin.import_tasks: manage_user_home.yml
