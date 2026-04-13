@@ -25,4 +25,4 @@
 
 - name: Configuring user's home
   ansible.builtin.import_tasks: manage_user_home.yml
-  when: user.home_create | default(users_home_create)
+  when: user.home_create | default(users_home_create) | bool
