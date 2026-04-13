@@ -20,6 +20,7 @@
   loop_control:
     loop_var: user
     label: "{{ user.username }}"
+  when: user.user_create | default (users_user_create) | bool
 
 - name: Removing users
   ansible.builtin.user:
