@@ -1,5 +1,6 @@
 *.log
 *.retry
+__pycache__/
 .DS_Store
 .vagrant
 .vscode/*
