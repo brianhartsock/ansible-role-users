@@ -10,3 +10,4 @@ __pycache__/
 .claude/settings.local.json
 .idea
 .venv
+requirements.txt
