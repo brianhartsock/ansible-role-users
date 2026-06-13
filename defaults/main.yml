@@ -67,3 +67,5 @@ users_authorized_keys_exclusive: false
 users_user_update: always
 # list of users to be removed
 users_remove: []
+# switch for debug output
+users_debug: false

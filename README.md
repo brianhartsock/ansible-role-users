@@ -112,6 +112,8 @@ users_authorized_keys_exclusive: no
 users_user_update: on_create
 # list of users to be removed
 users_remove: []
+# switch for debug output
+users_debug: false
 
 ```
 
