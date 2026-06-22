@@ -8,6 +8,7 @@ __pycache__/
 !.vscode/extensions.json
 .ansible
 .claude/settings.local.json
+.claude/worktrees/
 .idea
 .venv
 requirements.txt
