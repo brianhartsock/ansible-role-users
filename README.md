@@ -209,4 +209,6 @@ In lieu of a formal style guide, take care to maintain the existing coding style
 5. Create new Pull Request
 
 ## License
+Copyright (c) Brian Hartsock under the MIT license
+originally forked from weareinteractive.users
 Copyright (c) We Are Interactive under the MIT license.

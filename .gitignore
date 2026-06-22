@@ -1,5 +1,6 @@
 *.log
 *.retry
+__pycache__/
 .DS_Store
 .vagrant
 .vscode/*
@@ -9,3 +10,4 @@
 .claude/settings.local.json
 .idea
 .venv
+requirements.txt
