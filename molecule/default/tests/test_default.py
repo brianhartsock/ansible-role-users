@@ -63,3 +63,17 @@ def test_default_group_matches_username(host):
     user = host.user('defaultuser')
     assert user.exists
     assert user.group == 'defaultuser'
+
+
+def test_update1(host):
+    """Verify testuser_update1 has home update1a (overwritten)"""
+    user = host.user('testuser_update1')
+    assert user.exists
+    assert user.home == '/home/update1a'
+
+
+def test_update2(host):
+    """Verify testuser_update2 has home update2 (not overwritten)"""
+    user = host.user('testuser_update2')
+    assert user.exists
+    assert user.home == '/home/update2'
