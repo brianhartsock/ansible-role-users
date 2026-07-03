@@ -29,3 +29,30 @@
       - username: defaultuser
   roles:
     - role: brianhartsock.users
+
+- name: Converge (user_update, step 1)
+  hosts: all
+  vars:
+    users:
+      - username: testuser_update1
+        group: testgroup
+        user_update: on_create
+        home_create: false
+        home: "/home/update1"
+      - username: testuser_update1
+        group: testgroup
+        user_update: "always"
+        home_create: false
+        home: "/home/update1a"
+      - username: testuser_update2
+        group: testgroup
+        user_update: on_create
+        home_create: false
+        home: "/home/update2"
+      - username: testuser_update2
+        group: testgroup
+        user_update: "on_create"
+        home_create: false
+        home: "/home/update2a"
+  roles:
+    - role: brianhartsock.users

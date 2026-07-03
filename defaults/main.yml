@@ -32,6 +32,7 @@
 #       id_rsa_2: "xxx" or "{{ lookup('file', '/path/to/id_rsa') }}"
 #     shell: /bin/bash
 #     update_password: always
+#     user_update: on_create
 #     user_create: yes
 #
 # users_remove:
@@ -62,5 +63,9 @@ users_ssh_key_type: rsa
 users_ssh_key_bits: 2048
 # default user's setting for authorized keys exclusive
 users_authorized_keys_exclusive: false
+# should the user be updated always or just when just created
+users_user_update: always
 # list of users to be removed
 users_remove: []
+# switch for debug output
+users_debug: false

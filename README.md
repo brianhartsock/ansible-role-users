@@ -76,6 +76,7 @@ Here is a list of all the default variables for this role, which are also availa
 #       id_rsa_1: "xxx" or "{{ lookup('file', '/path/to/id_rsa') }}"
 #       id_rsa_2: "xxx" or "{{ lookup('file', '/path/to/id_rsa') }}"
 #     shell: /bin/bash
+#     user_update: always
 #     update_password: always
 #     user_create: yes
 #
@@ -107,8 +108,12 @@ users_ssh_key_type: rsa
 users_ssh_key_bits: 2048
 # default user's setting for authorized keys exclusive
 users_authorized_keys_exclusive: no
+# should the user be updated always or just when created
+users_user_update: on_create
 # list of users to be removed
 users_remove: []
+# switch for debug output
+users_debug: false
 
 ```
 
