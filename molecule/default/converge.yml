@@ -56,3 +56,12 @@
         home: "/home/update2a"
   roles:
     - role: brianhartsock.users
+
+- name: Converge (random_password)
+  hosts: all
+  vars:
+    users:
+      - username: randomuser
+        random_password: true
+  roles:
+    - role: brianhartsock.users

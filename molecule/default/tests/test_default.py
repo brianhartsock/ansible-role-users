@@ -1,3 +1,8 @@
+"""testinfra tests for the molecule verify stage"""
+
+from passlib.context import CryptContext
+
+
 def test_user_exists(host):
     """Verify the test user was created."""
     user = host.user('testuser')
@@ -77,3 +82,44 @@ def test_update2(host):
     user = host.user('testuser_update2')
     assert user.exists
     assert user.home == '/home/update2'
+
+
+def test_randomuser_exists(host):
+    """Verify the random_password test user was created."""
+    user = host.user('randomuser')
+    assert user.exists
+
+
+def test_randomuser_password_file(host):
+    """
+    Verify that the correct password is written to file
+    """
+    user = host.user("randomuser")
+    pw_file = host.file(f"{user.home}/password")
+
+    assert pw_file.exists
+    assert pw_file.is_file
+
+    # basic hygiene checks
+    assert pw_file.user == "randomuser"
+    assert pw_file.mode == 0o600
+
+    password = pw_file.content_string.strip()
+    assert password != ""
+
+    shadow_lines = host.file("/etc/shadow").content_string
+    line = next(
+            thisline for thisline in shadow_lines.splitlines()
+            if thisline.startswith(f"{user.name}:")
+            )
+
+    shadow_hash = line.split(":")[1]
+    assert shadow_hash, "shadow entry for randomuser not found"
+
+    pwd_ctx = CryptContext(
+        schemes=["sha512_crypt", "bcrypt", "md5_crypt"],
+        deprecated="auto",
+    )
+
+    # verify against whatever hash algorithm the system uses
+    assert pwd_ctx.verify(password, shadow_hash)

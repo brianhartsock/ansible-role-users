@@ -11,5 +11,6 @@ dev = [
   "ansible",
   "ansible-lint",
   "flake8",
+  "passlib",
   "pre-commit",
 ]

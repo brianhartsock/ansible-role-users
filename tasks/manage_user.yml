@@ -11,6 +11,30 @@
   ansible.builtin.set_fact:
     user_exists_before: "{{ passwd_getent is defined and passwd_getent.ansible_facts.getent_passwd[user.username] is defined }}"
 
+- name: "Output getent_passwd"
+  ansible.builtin.debug:
+    var: ansible_facts.getent_passwd
+  when: users_debug | bool
+
+- name: "Generating random password for user '{{ user.username }}'"
+  ansible.builtin.command: "{{ user.random_password_command | default(users_random_password_command) }}"
+  register: random_password
+  delegate_to: localhost
+  become: false
+  run_once: false
+  changed_when: false
+  when: >
+    (
+      ansible_facts.getent_passwd is not defined or
+      user.username not in ansible_facts.getent_passwd
+    ) and
+    user.random_password | default(users_random_password) | bool
+
+- name: "Hashing password for user '{{ user.username }}'"
+  ansible.builtin.set_fact:
+    user_random_password_hash: "{{ random_password.stdout | password_hash('sha512') }}"
+  when: random_password is defined and random_password.stdout is defined
+
 - name: "Adding user to the system: {{ user.username }}"
   ansible.builtin.user:
     name: "{{ user.username }}"
@@ -25,13 +49,13 @@
             }}"
     groups: "{{ user.groups | join(',') if user.groups is defined else users_groups | map(attribute='name') | join(',') }}"
     append: "{{ user.append | default(omit) }}"
-    password: "{{ user.password | default(omit) }}"
+    password: "{{ user_random_password_hash if (user_random_password_hash is defined) else (user.password | default(omit)) }}"
     ssh_key_file: ".ssh/id_{{ user.ssh_key_type | default(users_ssh_key_type) }}"
     ssh_key_passphrase: "{{ user.ssh_key_password | default(omit) }}"
     ssh_key_bits: "{{ user.ssh_key_bits | default(users_ssh_key_bits) }}"
     createhome: "{{ user.home_create | default(users_home_create) }}"
     shell: "{{ user.shell | default(users_shell | default(omit)) }}"
-    update_password: "{{ user.update_password | default(omit) }}"
+    update_password: "{{ 'always' if (user_random_password_hash is defined) else (user.update_password | default(omit)) }}"
   when: >
     (
       (user.user_update | default(users_user_update) ) == "always" or
@@ -42,6 +66,34 @@
     )
     and (user.user_create | default(users_user_create) | bool)
 
+- name: "Debug: output passwd_getent after adding user"
+  ansible.builtin.debug:
+    var: passwd_getent
+  when: users_debug | bool
+
+- name: Only if newly created
+  ansible.builtin.debug:
+    msg: "User was just created"
+  when: >
+    users_debug | bool and
+    (ansible_facts.getent_passwd is not defined or
+    user.username not in ansible_facts.getent_passwd)
+
 - name: Configuring user's home
   ansible.builtin.import_tasks: manage_user_home.yml
   when: user.home_create | default(users_home_create) | bool
+
+- name: Set last password change date
+  ansible.builtin.command:
+    cmd: chage -d {{ user.random_password_change_date | default(users_random_password_change_date) }} {{ user.username }}
+  when: user_random_password_hash is defined
+  changed_when: true
+
+- name: Store password in home directory
+  ansible.builtin.copy:
+    content: "{{ random_password.stdout }}\n"
+    dest: "{{ user.home | default(users_home ~ '/' ~ user.username) }}/password"
+    owner: "{{ user.username }}"
+    mode: '0600'
+  become: true
+  when: user_random_password_hash is defined

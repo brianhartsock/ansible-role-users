@@ -54,6 +54,9 @@ Here is a list of all the default variables for this role, which are also availa
 #     uid: 1000
 #     group: staff
 #     password: xxxxx               (a hash created with: mkpasswd)
+#     random_password: false
+#     random_password_command: "pwgen --secure 12 1"
+#     random_password_change_date: "2020-01-01"
 #     groups: ["adm", "www-data"]
 #     append: no                    (only append groups, leave others)
 #     home_mode: "0750"
@@ -112,6 +115,12 @@ users_authorized_keys_exclusive: no
 users_user_update: always
 # list of users to be removed
 users_remove: []
+# generate password for new user
+users_random_password: false
+# command to generate password if random_password=true
+users_random_password_command: "pwgen --secure 12 1"
+# date to set the random password change date (2020-01-01 is 18262)
+users_random_password_change_date: "2020-01-01"
 # switch for debug output
 users_debug: false
 
