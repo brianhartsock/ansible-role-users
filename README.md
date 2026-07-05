@@ -109,7 +109,7 @@ users_ssh_key_bits: 2048
 # default user's setting for authorized keys exclusive
 users_authorized_keys_exclusive: no
 # should the user be updated always or just when created
-users_user_update: on_create
+users_user_update: always
 # list of users to be removed
 users_remove: []
 # switch for debug output
