@@ -12,6 +12,7 @@
 #     groups: ["adm", "www-data"]
 #     append: no                    (only append groups, leave others)
 #     home_mode: "0750"
+#     home_ssh_mode: "0750"
 #     home_create: yes
 #     home: /path/to/user/home
 #     home_files:
@@ -59,6 +60,8 @@ users_group:
 users_groups: []
 # default user's home directory permissions
 users_home_mode: "0755"
+# default user's ~/.ssh directory permissions
+users_home_ssh_mode: "0755"
 # default user login shell
 # users_shell:
 # default user's ssh key type

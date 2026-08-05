@@ -2,26 +2,26 @@
 
 - name: Setting user's home permissions
   ansible.builtin.file:
-    dest: "{{ user.home | default(users_home ~ '/' ~ user.username) }}"
-    owner: "{{ user.username }}"
-    group: "{{ user.group if user.group is defined else (users_group.name if users_group else user.username) }}"
-    mode: "{{ user.home_mode if user.home_mode is defined else users_home_mode }}"
+    dest: "{{ _users_home }}"
+    owner: "{{ _users_uid }}"
+    group: "{{ _users_group }}"
+    mode: "{{ _users_home_mode }}"
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Adding user's .ssh directory
   ansible.builtin.file:
-    path: "{{ user.home | default(users_home ~ '/' ~ user.username) }}/.ssh"
-    owner: "{{ user.username }}"
-    group: "{{ user.group if user.group is defined else (users_group.name if users_group else user.username) }}"
+    path: "{{ _users_home }}/.ssh"
+    owner: "{{ _users_uid }}"
+    group: "{{ _users_group }}"
     state: directory
-    mode: "0700"
+    mode: "{{ _users_home_ssh_mode }}"
 
 - name: Adding user's private SSH key
   ansible.builtin.copy:
     content: "{{ user.ssh_key }}"
-    dest: "{{ user.home | default(users_home ~ '/' ~ user.username) }}/.ssh/id_{{ user.ssh_key_type | default('rsa') }}"
-    owner: "{{ user.username }}"
-    group: "{{ user.group if user.group is defined else (users_group.name if users_group else user.username) }}"
+    dest: "{{ _users_home }}/.ssh/id_{{ user.ssh_key_type | default('rsa') }}"
+    owner: "{{ _users_uid }}"
+    group: "{{ _users_group }}"
     mode: "0600"
   when: user.ssh_key is defined
   no_log: true
@@ -29,9 +29,9 @@
 - name: Adding user's private keys
   ansible.builtin.copy:
     content: "{{ item.value }}"
-    dest: "{{ user.home | default(users_home ~ '/' ~ user.username) }}/.ssh/{{ item.key }}"
-    owner: "{{ user.username }}"
-    group: "{{ user.group if user.group is defined else (users_group.name if users_group else user.username) }}"
+    dest: "{{ _users_home }}/.ssh/{{ item.key }}"
+    owner: "{{ _users_username }}"
+    group: "{{ _users_group }}"
     mode: "0600"
   when: user.ssh_key is not defined and user.ssh_keys is defined
   with_dict: "{{ user.ssh_keys }}"

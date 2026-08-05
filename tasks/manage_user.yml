@@ -44,6 +44,15 @@
 
 - name: Configuring user's home
   ansible.builtin.import_tasks: manage_user_home.yml
+  vars:
+    _users_getent: "{{ _users_passwd_getent_after.ansible_facts.getent_passwd[username] }}"
+    _users_username: "{{ username }}"
+    _users_uid: "{{ _users_getent[1] }}"
+    _users_gid: "{{ _users_getent[2] }}"
+    _users_home: "{{ _users_getent[4] }}"
+    _users_group: "{{ user.group if user.group is defined else (users_group.name if users_group else username) }}"
+    _users_home_mode: "{{ user.home_mode if user.home_mode is defined else users_home_mode }}"
+    _users_home_ssh_mode: "{{ user.home_ssh_mode if user.home_ssh_mode is defined else users_home_ssh_mode }}"
   when: user.home_create | default(users_home_create) | bool
 
 - name: Adding/Updating user's authorized SSH keys
