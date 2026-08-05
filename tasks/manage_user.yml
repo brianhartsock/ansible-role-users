@@ -45,3 +45,26 @@
 - name: Configuring user's home
   ansible.builtin.import_tasks: manage_user_home.yml
   when: user.home_create | default(users_home_create) | bool
+
+- name: Adding/Updating user's authorized SSH keys
+  ansible.posix.authorized_key:
+    key: "{{ user.authorized_keys | default([]) | join('\n') }}"
+    user: "{{ username }}"
+    exclusive: "{{ user.authorized_keys_exclusive | default(users_authorized_keys_exclusive) }}"
+  when: ( not _users_user_exists_before ) or
+        ( user.authorized_keys_update | default(users_authorized_keys_update) | bool )
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Adding/Updating user's home files
+  ansible.builtin.copy:
+    src: "{{ home_file }}"
+    dest: "{{ user.home | default(users_home ~ '/' ~ username) }}/{{ home_file | basename }}"
+    owner: "{{ username }}"
+    group: "{{ user.group if user.group is defined else (users_group.name if users_group else username) }}"
+    mode: "0644"
+  with_items: "{{ user.home_files | default(users_home_files) }}"
+  loop_control:
+    loop_var: home_file
+  when: ( not _users_user_exists_before ) or
+        ( user.home_files_update | default(users_home_files_update) | bool )
+

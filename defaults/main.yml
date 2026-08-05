@@ -17,11 +17,13 @@
 #     home_files:
 #       - "/path/to/user/home/.bashrc"
 #       - "/path/to/user/home/.bash_profile"
+#     home_files_update: false
 #     system: no
 #     authorized_keys:
 #       - "xxx"
 #       - "{{ lookup('file', '/path/to/id_rsa.pub') }}"
 #     authorized_keys_exclusive: yes
+#     authorized_keys_update: false
 #     ssh_key_type: rsa
 #     ssh_key_bits: 2048
 #     ssh_key_password: ""
@@ -45,6 +47,8 @@ users: []
 users_user_create: true
 # default user's dotfiles
 users_home_files: []
+# default update user's dot files always or just on user creation
+users_home_files_update: false
 # users home directory
 users_home: /home
 # create user's home directory
@@ -63,6 +67,8 @@ users_ssh_key_type: rsa
 users_ssh_key_bits: 2048
 # default user's setting for authorized keys exclusive
 users_authorized_keys_exclusive: false
+# default update authorized_keys always or just on user creation
+users_authorized_keys_update: false
 # should the user be updated always or just when created
 users_user_update: always
 # list of users to be removed
