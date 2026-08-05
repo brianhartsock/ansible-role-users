@@ -16,10 +16,35 @@
 
 - name: Configure users
   ansible.builtin.include_tasks: manage_user.yml
-  with_items: "{{ users }}"
+  loop: >-
+    {{
+      users
+      | dict2items
+      if users is mapping
+      else
+      users
+      | map('combine', {})
+      | list
+    }}
+  vars:
+    user: >-
+      {{
+        _user.value
+        if _user is mapping and _user.value is defined
+        else
+        _user
+      }}
+    username: >-
+      {{
+        _user.key
+        if _user is mapping and _user.key is defined
+        else
+        _user.username
+      }}
   loop_control:
-    loop_var: user
-    label: "{{ user.username }}"
+    loop_var: _user
+    label: "{{ username }}"
+  when: user.user_create | default(users_user_create) | bool
 
 - name: Removing users
   ansible.builtin.user:

@@ -2,25 +2,25 @@
 - name: "Checking if user exists already: {{ user.username }}"
   ansible.builtin.getent:
     database: passwd
-    key: "{{ user.username }}"
-  register: passwd_getent
+    key: "{{ username }}"
+  register: _users_passwd_getent_before
   failed_when: false
   changed_when: false
 
 - name: "Set user existence (before state)"
   ansible.builtin.set_fact:
-    user_exists_before: "{{ passwd_getent is defined and passwd_getent.ansible_facts.getent_passwd[user.username] is defined }}"
+    _users_user_exists_before: "{{ _users_passwd_getent_before is defined and _users_passwd_getent_before.ansible_facts.getent_passwd[username] is defined }}"
 
-- name: "Adding user to the system: {{ user.username }}"
+- name: "Adding user to the system: {{ username }}"
   ansible.builtin.user:
-    name: "{{ user.username }}"
+    name: "{{ username }}"
     uid: "{{ user.uid | default(omit) }}"
-    home: "{{ user.home | default(users_home ~ '/' ~ user.username) }}"
+    home: "{{ user.home | default(users_home ~ '/' ~ username ) }}"
     comment: "{{ user.name | default(omit) }}"
     system: "{{ user.system | default(omit) }}"
     generate_ssh_key: "{{ user.ssh_key_generate | default(omit) }}"
     group: "{{
-            omit if user.group is defined and user.group == user.username
+            omit if user.group is defined and user.group == username
             else (user.group if user.group is defined else (users_group.name if users_group else omit))
             }}"
     groups: "{{ user.groups | join(',') if user.groups is defined else users_groups | map(attribute='name') | join(',') }}"
@@ -33,14 +33,8 @@
     shell: "{{ user.shell | default(users_shell | default(omit)) }}"
     update_password: "{{ user.update_password | default(omit) }}"
   when: >
-    (
-      (user.user_update | default(users_user_update) ) == "always" or
-      (
-        (user.user_update | default(users_user_update) ) == "on_create" and
-        not user_exists_before
-      )
-    )
-    and (user.user_create | default(users_user_create) | bool)
+    _users_do_user_update and
+    (user.user_create | default(users_user_create) | bool)
 
 - name: Configuring user's home
   ansible.builtin.import_tasks: manage_user_home.yml
@@ -76,4 +70,3 @@
     loop_var: home_file
   when: ( not _users_user_exists_before ) or
         ( user.home_files_update | default(users_home_files_update) | bool )
-
